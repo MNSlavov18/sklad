@@ -1,6 +1,6 @@
 <?php
-require 'config.php';
-require 'header.php';
+require '../includes/config.php';
+require '../includes/header.php';
 
 $error = '';
 
@@ -8,18 +8,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+    // Проверка дали потребителят съществува
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
     $stmt->execute([$username]);
-    $user = $stmt->fetch();
 
-    // Проверяваме паролата с password_verify
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        header("Location: index.php");
-        exit;
+    if ($stmt->rowCount() > 0) {
+        $error = "Това потребителско име вече е заето!";
     } else {
-        $error = "Грешно име или парола!";
+        // Криптиране на паролата
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        if ($stmt->execute([$username, $hashed_password])) {
+            echo "<script>alert('Регистрацията успешна! Моля, влезте.'); window.location='login.php';</script>";
+        } else {
+            $error = "Възникна грешка.";
+        }
     }
 }
 ?>
@@ -27,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card shadow">
-                <div class="card-header bg-success text-white">Вход в системата</div>
+                <div class="card-header bg-primary text-white">Регистрация</div>
                 <div class="card-body">
                     <?php if($error): ?>
                         <div class="alert alert-danger"><?= $error ?></div>
@@ -42,11 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label>Парола</label>
                             <input type="password" name="password" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Вход</button>
+                        <button type="submit" class="btn btn-primary w-100">Регистрирай се</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-<?php require 'footer.php'; ?>
+<?php require '../includes/footer.php'; ?>
