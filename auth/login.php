@@ -23,7 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             setcookie('remember_user', $user['id'], time() + (86400 * 30), "/");
         }
 
-        echo "<script>window.location='dashboard.php';</script>";
+        if ($user['role'] === 'admin') {
+            echo "<script>window.location='" . BASE_URL . "admin/dashboard.php';</script>";
+        } else {
+            echo "<script>window.location='" . BASE_URL . "index.php';</script>";
+        }
         exit;
     } else {
         $error = "Грешно име или парола!";
