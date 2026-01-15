@@ -2,6 +2,7 @@
 require '../includes/config.php';
 require '../includes/header.php';
 
+/** @var PDO $pdo */ //
 $error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

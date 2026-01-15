@@ -2,6 +2,8 @@
 require '../includes/config.php';
 require '../includes/header.php';
 
+/** @var PDO $pdo */ //
+
 if (!isset($_SESSION['user_id'])) {
     echo "<script>window.location='login.php';</script>";
     exit;

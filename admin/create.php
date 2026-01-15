@@ -2,6 +2,8 @@
 require '../includes/config.php';
 require '../includes/header.php';
 
+/** @var PDO $pdo */ //
+
 // САМО АДМИНИСТРАТОРИ МОГАТ ДА ДОБАВЯТ
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     echo "<div class='alert alert-danger m-5'>Нямате права за тази страница!</div>";

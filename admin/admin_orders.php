@@ -1,6 +1,7 @@
 <?php
 require '../includes/config.php';
 require '../includes/header.php';
+/** @var PDO $pdo */ //
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     echo "<script>window.location='".BASE_URL."index.php';</script>"; exit;

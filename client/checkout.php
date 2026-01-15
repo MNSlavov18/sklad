@@ -1,6 +1,7 @@
 <?php
 require '../includes/config.php';
 require '../includes/header.php';
+/** @var PDO $pdo */ //
 
 if (empty($_SESSION['cart'])) {
     echo "<script>window.location='index.php';</script>";

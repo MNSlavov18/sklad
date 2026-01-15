@@ -2,6 +2,7 @@
 // products_manage.php
 require '../includes/config.php';
 require '../includes/header.php';
+/** @var PDO $pdo */ //
 
 if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit; }
 
